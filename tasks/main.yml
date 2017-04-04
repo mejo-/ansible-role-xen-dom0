@@ -1,0 +1,38 @@
+---
+
+- name: install xen dependencies
+  apt:
+    pkg: "{{ item }}"
+    state: present
+  with_items: "{{ xen_dom0_dependencies }}"
+
+- name: remove/purge os-prober
+  apt:
+    pkg: os-prober
+    state: absent
+    purge: yes
+  notify: update grub
+
+- name: dpkg-divert /etc/grub.d/20_linux_xen -> /etc/grub.d/08_linux_xen
+  command: >
+    dpkg-divert --quiet --local
+      --divert /etc/grub.d/08_linux_xen
+      --rename /etc/grub.d/20_linux_xen
+  args:
+    creates: '/etc/grub.d/08_linux_xen'
+  when: xen_dom0_divert_grub|d(true)
+  notify: update grub
+
+- name: set Xen boot parameters in grub
+  blockinfile:
+    dest: /etc/default/grub
+    block: |
+      # Xen boot parameters for all Xen boots
+      GRUB_CMDLINE_XEN="dom0_mem={{ xen_dom0_mem }}"
+  notify: update grub
+
+- name: create LVM volume group 'vgxen'
+  lvg:
+    vg: vgxen
+    pvs: "{{ xen_dom0_lvm_pvs|join(',') }}"
+  when: xen_dom0_lvm_pvs|d()

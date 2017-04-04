@@ -1,0 +1,14 @@
+---
+
+xen_dom0_dependencies:
+  - bridge-utils
+  - ifenslave
+  - lvm2
+  - xen-tools
+  - xen-system-amd64
+
+xen_dom0_divert_grub: yes
+
+xen_dom0_mem: "1024M"
+
+#xen_dom0_lvm_pvs
