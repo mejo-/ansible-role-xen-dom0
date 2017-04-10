@@ -31,8 +31,51 @@
       GRUB_CMDLINE_XEN="dom0_mem={{ xen_dom0_mem }}"
   notify: update grub
 
+- name: create directories for Xen VM configs and autostart symlinks
+  file:
+    path: "/etc/xen/{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  with_items:
+    - auto
+    - VMs
+
+- name: disable Xen DomU restore
+  lineinfile:
+    dest: "/etc/default/xendomains"
+    regexp: "^XENDOMAINS_RESTORE="
+    line: "XENDOMAINS_RESTORE=false"
+    state: present
+
 - name: create LVM volume group 'vgxen'
   lvg:
     vg: vgxen
     pvs: "{{ xen_dom0_lvm_pvs|join(',') }}"
   when: xen_dom0_lvm_pvs|d()
+
+- name: create directories for debian-installer Xen images
+  file:
+    path: "/srv/xen/netboot/{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  with_items:
+    - jessie
+    - stretch
+
+- name: fetch debian-installer Xen images
+  get_url:
+    url: https://deb.debian.org/debian/dists/{{ item[0] }}/main/installer-amd64/current/images/netboot/xen/{{ item[1] }}
+    dest: /srv/xen/netboot/{{ item[0] }}/{{ item[1] }}
+    owner: root
+    group: root
+    mode: 0644
+    force: yes
+  with_nested:
+    - [ 'jessie', 'stretch' ]
+    - [ 'initrd.gz', 'vmlinuz' ]
+  tags:
+    - role:xen-dom0:d-i

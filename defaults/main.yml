@@ -3,6 +3,7 @@
 xen_dom0_dependencies:
   - bridge-utils
   - ifenslave
+  - kpartx
   - lvm2
   - xen-tools
   - xen-system-amd64
