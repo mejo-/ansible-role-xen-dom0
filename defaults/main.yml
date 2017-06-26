@@ -12,4 +12,4 @@ xen_dom0_divert_grub: yes
 
 xen_dom0_mem: "1024M"
 
-#xen_dom0_lvm_pvs
+#xen_dom0_lvm_pvs: []
