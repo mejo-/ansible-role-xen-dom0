@@ -1,5 +1,11 @@
 ---
 
+- name: install IPMI tool
+  apt:
+    pkg: ipmitool
+    state: present
+  when: xen_dom0_ipmitool|d()
+
 - name: install xen dependencies
   apt:
     pkg: "{{ item }}"
