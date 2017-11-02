@@ -2,6 +2,7 @@
 
 xen_dom0_dependencies:
   - bridge-utils
+  - grub-pc
   - ifenslave
   - kpartx
   - lvm2
