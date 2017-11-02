@@ -3,3 +3,5 @@
 
 - name: update grub
   command: update-grub
+  tags:
+    - molecule_test_skip
