@@ -3,5 +3,4 @@
 
 - name: update grub
   command: update-grub
-  tags:
-    - molecule_test_skip
+  when: ansible_virtualization_type != "docker"
