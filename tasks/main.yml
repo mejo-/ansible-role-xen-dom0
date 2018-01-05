@@ -48,6 +48,13 @@
     - auto
     - VMs
 
+- name: disable Xen DomU save
+  lineinfile:
+    dest: "/etc/default/xendomains"
+    regexp: "^XENDOMAINS_SAVE="
+    line: "XENDOMAINS_SAVE="
+    state: present
+
 - name: disable Xen DomU restore
   lineinfile:
     dest: "/etc/default/xendomains"
