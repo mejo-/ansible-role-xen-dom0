@@ -78,6 +78,7 @@
   with_items:
     - jessie
     - stretch
+    - buster
 
 - name: fetch debian-installer Xen images
   get_url:
@@ -88,7 +89,7 @@
     mode: 0644
     force: yes
   with_nested:
-    - [ 'jessie', 'stretch' ]
+    - [ 'jessie', 'stretch', 'buster' ]
     - [ 'initrd.gz', 'vmlinuz' ]
   tags:
     - role:xen-dom0:d-i
