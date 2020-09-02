@@ -8,9 +8,8 @@
 
 - name: install xen dependencies
   apt:
-    pkg: "{{ item }}"
+    pkg: "{{ xen_dom0_dependencies }}"
     state: present
-  with_items: "{{ xen_dom0_dependencies }}"
 
 - name: remove/purge os-prober
   apt:
